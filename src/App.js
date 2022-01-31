@@ -3,9 +3,14 @@ import Search from './components/Search'
 import CountryList from './components/CountryList'
 import Amount from './components/Amount'
 import { getExchangeRates, login } from './api'
+import { useLocalStorage } from './hooks'
 
 const App = () => {
-  const [countries, setCountries] = useState([])
+  const storedCountries = localStorage.getItem('countries')
+  const [countries, setCountries] = useLocalStorage(
+    'countries',
+    storedCountries ? JSON.parse(localStorage.getItem('countries')) : []
+  )
   const [amount, setAmount] = useState('')
 
   const addCountry = async (country) => {
@@ -38,7 +43,9 @@ const App = () => {
     ])
   }
 
-  useEffect(() => login(), [])
+  useEffect(() => {
+    login()
+  }, [])
   return (
     <div className='App'>
       <Search addCountry={addCountry} />

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { login, searchCountryByName } from '../api'
-import { useDebounce, useTimeout } from '../hooks'
+import { useDebounce } from '../hooks'
 
 const Search = ({ addCountry }) => {
   const [search, setSearch] = useState('')
@@ -15,8 +15,9 @@ const Search = ({ addCountry }) => {
       setSearchResults(countries || [])
     } catch (err) {
       setSearch('')
-      if (err.response.status === 429) return alert(err.response.data) // Too many requests
-      if ([401, 403].includes(err.response.status)) return login() // Update auth token
+      if (err?.response?.status === 429) return alert(err.response.data) // Too many requests
+      if ([401, 403].includes(err?.response?.status)) return login() // Update auth token
+      console.error(err)
     }
   }
 
